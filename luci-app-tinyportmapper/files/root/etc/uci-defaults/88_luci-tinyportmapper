@@ -1,0 +1,23 @@
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@tinyportmapper[-1]
+	add ucitrack tinyportmapper
+	set ucitrack.@tinyportmapper[-1].init=tinyportmapper
+	commit ucitrack
+EOF
+
+general=$(uci -q get tinyportmapper.@general[-1])
+
+if [ -z "$general" ]; then
+	uci -q add tinyportmapper general
+fi
+
+if [ ."$general" != ."general" ]; then
+	uci -q batch <<-EOF >/dev/null
+		rename tinyportmapper.@general[-1]="general"
+		set tinyportmapper.general.server="nil"
+		commit tinyportmapper
+	EOF
+fi
+
+rm -rf /tmp/luci-indexcache /tmp/luci-modulecache
+exit 0
