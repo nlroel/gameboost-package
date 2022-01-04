@@ -22,7 +22,6 @@ create_config() {
 	local config_file="$1"
 	echo "# auto-generated config file from /etc/config/tinyportmapper" > $config_file
 
-	echo "-c" >> $config_file
 	echo "-l ${listen_addr}:${listen_port}" >> $config_file
 	echo "-r ${server_addr}:${server_port}" >> $config_file
 
